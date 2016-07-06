@@ -1,0 +1,15 @@
+package cn.edu.tongji.sse.StorageMonitor;
+
+import java.io.Serializable;
+
+/**
+ * Created by hahong on 2016/7/6.
+ */
+public class Config implements Serializable {
+    public static String KafkaAddr = "10.60.45.80:9092";
+    public static String KafkaAlgorithmTaskTopic = "Algorithm_debug";
+    public static String KafkaMonitorMessageTopic = "Monitor_debug";
+
+    public static String AlgorithmPageRank = "PageRank";
+    public static String AlgorithmSSSP = "SSSP";
+}
