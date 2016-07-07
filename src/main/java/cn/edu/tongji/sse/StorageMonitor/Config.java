@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Config implements Serializable {
     public static String KafkaAddr = "10.60.45.80:9092";
     public static String KafkaAlgorithmTaskTopic = "Algorithm_debug";
+    public static String KafkaAlgorithmResultTopic = "Result_debug";
     public static String KafkaMonitorMessageTopic = "Monitor_debug";
 
     public static String AlgorithmPageRank = "PageRank";
