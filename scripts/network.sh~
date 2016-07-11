@@ -1,0 +1,6 @@
+#!/bin/bash
+t=`cat /proc/net/dev`
+for z in $t
+do
+	echo $z
+done
