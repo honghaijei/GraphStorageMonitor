@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  * Created by honghaijie on 7/11/16.
  */
 public class MonitorUtils {
-    public class NetworkIO {
+    public static class NetworkIO {
         long send;
         long receive;
         public NetworkIO() {}
@@ -37,7 +37,7 @@ public class MonitorUtils {
 
 
     }
-    public String executeCommands(String path) throws IOException {
+    public static String executeCommands(String path) throws IOException {
 
         File tempScript = new File(path);
         StringBuilder sb = new StringBuilder();
@@ -58,15 +58,15 @@ public class MonitorUtils {
         }
         return sb.toString();
     }
-    public double getMemoryUsage() throws IOException {
+    public static long getMemoryUsage() throws IOException {
         String memoryRawStr = executeCommands("scripts/memory.sh");
         String[] splitedMemotyStr = memoryRawStr.split("\n");
-        double totalMemory = Double.parseDouble(splitedMemotyStr[0]);
-        double usedMemory = Double.parseDouble(splitedMemotyStr[1]);
-        double memoryUsage = usedMemory / totalMemory;
-        return memoryUsage;
+        //double totalMemory = Double.parseDouble(splitedMemotyStr[0]);
+        long usedMemory = Long.parseLong(splitedMemotyStr[1]);
+        //double memoryUsage = usedMemory / totalMemory;
+        return usedMemory;
     }
-    public NetworkIO getNetWorkUsage() throws IOException {
+    public static NetworkIO getNetWorkUsage() throws IOException {
         String networkRawStr = executeCommands("scripts/network.sh");
         String[] splitedNetworkStr = networkRawStr.split("\n");
         long receive = 0L, send = 0L;
@@ -79,7 +79,7 @@ public class MonitorUtils {
         NetworkIO ans = new NetworkIO(send, receive);
         return ans;
     }
-    public double getCPUUsage() throws IOException {
+    public static double getCPUUsage() throws IOException {
         String cpuRawStr = executeCommands("scripts/cpu.sh");
         return Double.parseDouble(cpuRawStr) / 100.0;
     }
