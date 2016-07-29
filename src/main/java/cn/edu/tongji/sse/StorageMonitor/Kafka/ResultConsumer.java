@@ -2,7 +2,7 @@ package cn.edu.tongji.sse.StorageMonitor.Kafka;
 
 import cn.edu.tongji.sse.StorageMonitor.Config;
 import cn.edu.tongji.sse.StorageMonitor.Utils;
-import cn.edu.tongji.sse.StorageMonitor.model.ResultMessage;
+import cn.edu.tongji.sse.StorageMonitor.model.AlgorithmResultMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -27,7 +27,7 @@ public class ResultConsumer {
         while (true) {
             ConsumerRecords<String, byte[]> records = consumer.poll(10000);
             for (ConsumerRecord<String, byte[]> record : records) {
-                ResultMessage msg = Utils.readKryoObject(ResultMessage.class, record.value());
+                AlgorithmResultMessage msg = Utils.readKryoObject(AlgorithmResultMessage.class, record.value());
                 System.out.println(msg.toString());
             }
         }

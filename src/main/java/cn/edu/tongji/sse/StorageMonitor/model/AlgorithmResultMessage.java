@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 /**
  * Created by Administrator on 2016/7/6 0006.
  */
-public class ResultMessage implements Serializable {
+public class AlgorithmResultMessage implements Serializable {
     private String taskId;
     private String algorithm;
     private String storageEndpoint;

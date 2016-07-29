@@ -3,7 +3,6 @@ package cn.edu.tongji.sse.StorageMonitor.Kafka;
 import cn.edu.tongji.sse.StorageMonitor.Config;
 import cn.edu.tongji.sse.StorageMonitor.Utils;
 import cn.edu.tongji.sse.StorageMonitor.model.MonitorMessage;
-import cn.edu.tongji.sse.StorageMonitor.model.ResultMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
