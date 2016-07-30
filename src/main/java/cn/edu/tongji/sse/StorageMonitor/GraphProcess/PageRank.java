@@ -7,8 +7,13 @@ import cn.edu.tongji.sse.StorageMonitor.model.AlgorithmResultMessage;
  * Created by hahong on 2016/7/29.
  */
 public class PageRank implements AlgorithmTask {
+
     @Override
-    public void run(GraphDataSet dataset) {
+    public void prepare(GraphDataSet dataset) {
+    }
+
+    @Override
+    public void run() {
         long sum = 0;
         for (int i = 0; i < 10000000; ++i) {
             sum += i;
