@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class AlgorithmTaskProducer {
     private static Random rand = new Random();
-    private static int count = 100;
+    private static int count = 1;
 
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -36,7 +36,7 @@ public class AlgorithmTaskProducer {
             msg.setParameters(null);
             msg.setStorageEndpoint("");
             byte[] bytes = Utils.writeKryoObject(msg);
-            producer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmTaskTopic, "", bytes));
+            producer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmPageRankTaskTopic, "", bytes));
             System.out.println(msg);
         }
 

@@ -7,5 +7,5 @@ import cn.edu.tongji.sse.StorageMonitor.model.AlgorithmResultMessage;
  * Created by hahong on 2016/7/29.
  */
 public interface AlgorithmTask {
-    AlgorithmResultMessage run(GraphDataSet dataset);
+    void run(GraphDataSet dataset);
 }
