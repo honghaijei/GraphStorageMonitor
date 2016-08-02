@@ -21,12 +21,13 @@ import java.util.*;
  * Created by hahong on 2016/7/30.
  */
 public class GraphProcessTaskScheduler {
-    public static GraphDataSet getGraphDataSource(AlgorithmTaskMessage msg) {
+    private AlgorithmTask task;
+    public GraphDataSet getGraphDataSource(AlgorithmTaskMessage msg) {
         GraphDataSet dataset = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
         return dataset;
     }
-    public static AlgorithmTask getAlgorithmTask(AlgorithmTaskMessage msg) {
-        return new PageRank();
+    public AlgorithmTask getAlgorithmTask(AlgorithmTaskMessage msg) {
+        return task;
     }
     static Producer<String, byte[]> resultProducer;
     static KafkaConsumer<String, byte[]> taskConsumer;
@@ -54,44 +55,23 @@ public class GraphProcessTaskScheduler {
         prop.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         taskConsumer = new KafkaConsumer<String, byte[]>(prop);
     }
-    static Properties readConfig() {
-        Properties config = new Properties();
-        InputStream input = null;
-
-        try {
-            input = new FileInputStream("config.properties");
-            config.load(input);
-            return config;
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
-
-    public static void main(String args[]) {
-        Properties config = readConfig();
+    public GraphProcessTaskScheduler() {
         init();
-        List<String> algorithms = new ArrayList<>();
-        algorithms.addAll(Arrays.asList(config.getProperty("algorithm").split(",")));
-        taskConsumer.subscribe(algorithms);
-
-
+    }
+    public void setTask(String s, AlgorithmTask task) {
+        taskConsumer.subscribe(Arrays.asList(s));
+        this.task = task;
+    }
+    public void run() {
         while (true) {
             ConsumerRecords<String, byte[]> records = taskConsumer.poll(10000);
             for (ConsumerRecord<String, byte[]> record : records) {
                 AlgorithmTaskMessage taskMsg = Utils.readKryoObject(AlgorithmTaskMessage.class, record.value());
                 GraphDataSet dataset = getGraphDataSource(taskMsg);
                 AlgorithmTask task = getAlgorithmTask(taskMsg);
+                task.prepare(dataset);
                 long startTime = System.currentTimeMillis();
+                task.run();
                 long endTime = System.currentTimeMillis();
                 AlgorithmResultMessage resultMsg = new AlgorithmResultMessage();
                 resultMsg.setTaskId(taskMsg.getTaskId());
@@ -105,6 +85,6 @@ public class GraphProcessTaskScheduler {
                 resultProducer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmResultTopic, "", bytes));
             }
         }
-
     }
+
 }
