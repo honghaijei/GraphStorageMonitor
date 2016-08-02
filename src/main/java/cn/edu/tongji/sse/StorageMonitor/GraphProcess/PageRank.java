@@ -60,7 +60,7 @@ public class PageRank implements AlgorithmTask {
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH ./input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar /usr/tmp/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
+        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
