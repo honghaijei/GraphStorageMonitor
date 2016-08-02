@@ -16,6 +16,8 @@ import java.util.Iterator;
  */
 public class PageRank implements AlgorithmTask {
 
+    /**input file name*/
+    public static final String INPUT_NAME = "PageRankInput";
     /**input data path*/
     public static final String INPUT_PATH = "/usr/tmp/PageRankInput";
     @Override
@@ -31,7 +33,7 @@ public class PageRank implements AlgorithmTask {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write(1);
+                writer.write(1);//init pagerank value
                 GraphNode nextNode = it.next();
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
@@ -59,7 +61,9 @@ public class PageRank implements AlgorithmTask {
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH ./input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/PageRankOutput");
         Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
         String lsString = Execute.exec("ls -l").toString();
 
