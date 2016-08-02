@@ -92,7 +92,6 @@ public class GraphProcessTaskScheduler {
                 GraphDataSet dataset = getGraphDataSource(taskMsg);
                 AlgorithmTask task = getAlgorithmTask(taskMsg);
                 long startTime = System.currentTimeMillis();
-                task.run(dataset);
                 long endTime = System.currentTimeMillis();
                 AlgorithmResultMessage resultMsg = new AlgorithmResultMessage();
                 resultMsg.setTaskId(taskMsg.getTaskId());
