@@ -73,8 +73,8 @@ public class SSSPGiraph implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/" + INPUT_NAME);
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH + " /input");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/SSSPOutput");
         Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
                 "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +

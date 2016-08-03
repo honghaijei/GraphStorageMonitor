@@ -61,8 +61,8 @@ public class WCC implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");

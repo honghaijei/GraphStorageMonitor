@@ -61,7 +61,7 @@ public class SSSP implements AlgorithmTask{
                     while (edgesIterator.hasNext()){
                         //Neighbors
                         GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId());
+                        writer.write(end.getId() + "");
                         if(edgesIterator.hasNext()){
                             writer.write(",");
                         }
@@ -90,8 +90,8 @@ public class SSSP implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_1");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
