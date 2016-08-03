@@ -13,7 +13,7 @@ public class DMST implements AlgorithmTask {
     /**input file name*/
     public static final String INPUT_NAME = "DMSTInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/DMSTInput";
+    public static final String INPUT_PATH = "/tmp/DMSTInput";
     @Override
     /*
     data format:

@@ -19,7 +19,7 @@ public class PageRank implements AlgorithmTask {
     /**input file name*/
     public static final String INPUT_NAME = "PageRankInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/PageRankInput";
+    public static final String INPUT_PATH = "/tmp/PageRankInput";
     @Override
     /*
     format:pagerankValue neighbor neighbor neighbor .....

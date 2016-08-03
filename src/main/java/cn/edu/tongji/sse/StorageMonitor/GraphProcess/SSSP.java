@@ -16,7 +16,7 @@ public class SSSP implements AlgorithmTask{
     /**input file name*/
     public static final String INPUT_NAME = "SSSPInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/SSSPInput";
+    public static final String INPUT_PATH = "/tmp/SSSPInput";
     /*
     data format:
     SourceId<Tab>neighbor,neighbor|0|GRAY|

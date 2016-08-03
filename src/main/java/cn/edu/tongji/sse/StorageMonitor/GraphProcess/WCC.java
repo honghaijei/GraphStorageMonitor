@@ -15,7 +15,7 @@ public class WCC implements AlgorithmTask{
     /**input file name*/
     public static final String INPUT_NAME = "WCCInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/WCCInput";
+    public static final String INPUT_PATH = "/tmp/WCCInput";
     @Override
     /*
     data format:

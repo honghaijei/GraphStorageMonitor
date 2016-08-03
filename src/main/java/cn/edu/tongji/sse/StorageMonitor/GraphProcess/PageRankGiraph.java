@@ -14,7 +14,7 @@ public class PageRankGiraph implements AlgorithmTask{
     /**input file name*/
     public static final String INPUT_NAME = "PageRankInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/PageRankInput";
+    public static final String INPUT_PATH = "/tmp/PageRankInput";
     /*
     data format
     [VertexId,VertexValue,[[TargetId,edgeValue],[TargetId,edgeValue].....]]

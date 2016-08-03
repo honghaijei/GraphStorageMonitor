@@ -15,7 +15,7 @@ public class SSSPGiraph implements AlgorithmTask{
     /**input file name*/
     public static final String INPUT_NAME = "SSSPInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/SSSPInput";
+    public static final String INPUT_PATH = "/tmp/SSSPInput";
     /*
     data format
     [VertexId,VertexValue,[[TargetId,edgeValue],[TargetId,edgeValue].....]]
