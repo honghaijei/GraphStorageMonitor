@@ -89,4 +89,9 @@ public class PageRankGiraph implements AlgorithmTask{
         System.out.println(pwdString);
         System.out.println(lsString);
     }
+    public static void main(String[] args) {
+        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        gpts.setTask("pagerank-giraph", new DMSTGiraph());
+        gpts.run();
+    }
 }

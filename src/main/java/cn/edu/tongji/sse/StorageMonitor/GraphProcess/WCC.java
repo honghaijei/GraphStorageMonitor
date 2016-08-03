@@ -75,7 +75,7 @@ public class WCC implements AlgorithmTask{
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("wcc", new SSSP());
+        gpts.setTask("wcc", new WCC());
         gpts.run();
     }
 }

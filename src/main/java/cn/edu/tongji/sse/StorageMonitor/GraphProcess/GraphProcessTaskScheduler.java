@@ -21,13 +21,10 @@ import java.util.*;
  * Created by hahong on 2016/7/30.
  */
 public class GraphProcessTaskScheduler {
-    private AlgorithmTask task;
+    private Map<String, AlgorithmTask> algorithmTaskMap = new HashMap<>();
     public GraphDataSet getGraphDataSource(AlgorithmTaskMessage msg) {
         GraphDataSet dataset = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
         return dataset;
-    }
-    public AlgorithmTask getAlgorithmTask(AlgorithmTaskMessage msg) {
-        return task;
     }
     static Producer<String, byte[]> resultProducer;
     static KafkaConsumer<String, byte[]> taskConsumer;
@@ -60,15 +57,16 @@ public class GraphProcessTaskScheduler {
     }
     public void setTask(String s, AlgorithmTask task) {
         taskConsumer.subscribe(Arrays.asList(s));
-        this.task = task;
+        algorithmTaskMap.put(s, task);
     }
     public void run() {
         while (true) {
-            ConsumerRecords<String, byte[]> records = taskConsumer.poll(10000);
+            ConsumerRecords<String, byte[]> records = taskConsumer.poll(2000);
             for (ConsumerRecord<String, byte[]> record : records) {
+
                 AlgorithmTaskMessage taskMsg = Utils.readKryoObject(AlgorithmTaskMessage.class, record.value());
                 GraphDataSet dataset = getGraphDataSource(taskMsg);
-                AlgorithmTask task = getAlgorithmTask(taskMsg);
+                AlgorithmTask task = algorithmTaskMap.get(record.topic());
                 task.prepare(dataset);
                 long startTime = System.currentTimeMillis();
                 task.run();

@@ -73,7 +73,7 @@ public class DMST implements AlgorithmTask {
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("dmst", new SSSP());
+        gpts.setTask("dmst", new DMST());
         gpts.run();
     }
 }

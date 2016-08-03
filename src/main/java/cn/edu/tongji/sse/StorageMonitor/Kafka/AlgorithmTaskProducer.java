@@ -36,7 +36,7 @@ public class AlgorithmTaskProducer {
             msg.setParameters(null);
             msg.setStorageEndpoint("");
             byte[] bytes = Utils.writeKryoObject(msg);
-            producer.send(new ProducerRecord<String, byte[]>("abc", "", bytes));
+            producer.send(new ProducerRecord<String, byte[]>("testtask", "", bytes));
             System.out.println(msg);
         }
 
