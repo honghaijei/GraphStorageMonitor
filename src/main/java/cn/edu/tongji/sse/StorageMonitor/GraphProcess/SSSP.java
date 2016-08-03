@@ -104,7 +104,7 @@ public class SSSP implements AlgorithmTask{
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("sssp", new SSSP());
+        gpts.addTask("sssp", new SSSP());
         gpts.run();
     }
 }

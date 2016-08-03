@@ -91,7 +91,7 @@ public class SSSPGiraph implements AlgorithmTask{
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("sssp-giraph", new SSSPGiraph());
+        gpts.addTask("sssp-giraph", new SSSPGiraph());
         gpts.run();
     }
 }
