@@ -73,52 +73,57 @@ public class MonitorDataStorage {
         consumer.subscribe(Arrays.asList(Config.KafkaAlgorithmResultTopic));
 
         while (true) {
+
             ConsumerRecords<String, byte[]> records = consumer.poll(10000);
-            for (ConsumerRecord<String, byte[]> record : records) {
-                AlgorithmResultMessage msg = Utils.readKryoObject(AlgorithmResultMessage.class, record.value());
-                System.out.printf("Get result message, taskid: %s\n", msg.getTaskId());
-                List<MySqlAllDataEntry> buf = new ArrayList<>();
-                synchronized (cache) {
-                    for (String machine : msg.getMachines()) {
-                        LRUCache<Long, MonitorMessage> logs = cache.get(machine);
-                        if (logs == null) {
-                            System.out.println("WARNING: wrong machine id or machine has die.");
-                            continue;
-                        }
+            try {
+                for (ConsumerRecord<String, byte[]> record : records) {
+                    AlgorithmResultMessage msg = Utils.readKryoObject(AlgorithmResultMessage.class, record.value());
+                    System.out.printf("Get result message, taskid: %s, start: %d, end: %d\n", msg.getTaskId(), msg.getStartTime(), msg.getEndTime());
+                    List<MySqlAllDataEntry> buf = new ArrayList<>();
+                    synchronized (cache) {
+                        for (String machine : msg.getMachines()) {
+                            LRUCache<Long, MonitorMessage> logs = cache.get(machine);
+                            if (logs == null) {
+                                System.out.println("WARNING: wrong machine id or machine has die.");
+                                continue;
+                            }
 
-                        try {
-                            JSONObject json = new JSONObject();
-                            JSONArray jsonLogs = new JSONArray();
-                            for (Map.Entry<Long, MonitorMessage> e : logs.entrySet()) {
-                                if (e.getKey() >= msg.getStartTime() && e.getKey() < msg.getEndTime()) {
-                                    JSONObject t = new JSONObject();
-                                    t.put("cpu", e.getValue().getCPUUsage() + "");
-                                    t.put("memory", e.getValue().getMemoryUsage() + "");
-                                    t.put("networkReceive", e.getValue().getNetworkReceive() + "");
-                                    t.put("networkSend", e.getValue().getNetworkSend() + "");
-                                    jsonLogs.put(t);
-                                }
-                            }
-                            json.put("data", jsonLogs);
-                            MySqlAllDataEntry dataEntry = new MySqlAllDataEntry(msg.getTaskId(), machine, msg.getStartTime(), msg.getEndTime(), json.toString());
-                            buf.add(dataEntry);
-                            System.out.println(dataEntry.toString());
-                            MonitorLogDatabaseConnector connector = new MonitorLogDatabaseConnector();
-                            Connection c = connector.ConnectMysql();
-                            for (MySqlAllDataEntry e : buf) {
-                                connector.InsertSql(e);
-                            }
                             try {
-                                connector.CutConnection(c);
-                            } catch (SQLException e1) {
-                                e1.printStackTrace();
+                                JSONObject json = new JSONObject();
+                                JSONArray jsonLogs = new JSONArray();
+                                for (Map.Entry<Long, MonitorMessage> e : logs.entrySet()) {
+                                    if (e.getKey() >= msg.getStartTime() && e.getKey() < msg.getEndTime()) {
+                                        JSONObject t = new JSONObject();
+                                        t.put("cpu", e.getValue().getCPUUsage() + "");
+                                        t.put("memory", e.getValue().getMemoryUsage() + "");
+                                        t.put("networkReceive", e.getValue().getNetworkReceive() + "");
+                                        t.put("networkSend", e.getValue().getNetworkSend() + "");
+                                        jsonLogs.put(t);
+                                    }
+                                }
+                                json.put("data", jsonLogs);
+                                MySqlAllDataEntry dataEntry = new MySqlAllDataEntry(msg.getTaskId(), machine, msg.getStartTime(), msg.getEndTime(), json.toString());
+                                buf.add(dataEntry);
+                                System.out.println(dataEntry.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
+                        }
+                    }
+                    MonitorLogDatabaseConnector connector = new MonitorLogDatabaseConnector();
+                    Connection c = connector.ConnectMysql();
+                    for (MySqlAllDataEntry e : buf) {
+                        connector.InsertSql(e);
+                    }
+                    try {
+                        connector.CutConnection(c);
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
