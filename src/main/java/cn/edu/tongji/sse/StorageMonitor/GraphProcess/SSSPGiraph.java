@@ -3,18 +3,19 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+
 import java.io.*;
 import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Created by chenran on 2016/8/2 0002.
+ * Created by chenran on 2016/8/3 0003.
  */
-public class PageRankGiraph implements AlgorithmTask{
+public class SSSPGiraph implements AlgorithmTask{
     /**input file name*/
-    public static final String INPUT_NAME = "PageRankInput";
+    public static final String INPUT_NAME = "SSSPInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/usr/tmp/PageRankInput";
+    public static final String INPUT_PATH = "/usr/tmp/SSSPInput";
     /*
     data format
     [VertexId,VertexValue,[[TargetId,edgeValue],[TargetId,edgeValue].....]]
@@ -74,15 +75,14 @@ public class PageRankGiraph implements AlgorithmTask{
         String pwdString = Execute.exec("pwd").toString();
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/INPUT_NAME");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/PageRankOutput");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/SSSPOutput");
         Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
                 "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
-                "org.apache.giraph.GiraphRunner org.apache.giraph.examples.SimplePageRankComputation " +
+                "org.apache.giraph.GiraphRunner org.apache.giraph.examples.SimpleShortestPathsComputation " +
                 "-vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat " +
-                "-vip /input/PageRankInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
-                "-op /output/PageRankOutput " +
-                "-w 1 " +
-                "-mc org.apache.giraph.examples.SimplePageRankComputation\\$SimplePageRankMasterCompute");
+                "-vip /input/SSSPInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
+                "-op /output/SSSPOutput " +
+                "-w 1 ");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
