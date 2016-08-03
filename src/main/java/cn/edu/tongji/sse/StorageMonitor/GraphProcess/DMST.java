@@ -61,10 +61,10 @@ public class DMST implements AlgorithmTask {
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.DMST.DMST");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.DMST.DMST");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");

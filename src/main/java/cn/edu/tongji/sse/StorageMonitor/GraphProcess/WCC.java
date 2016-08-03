@@ -61,12 +61,12 @@ public class WCC implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.CCC.MindistSearchJob");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.CCC.MindistSearchJob");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
