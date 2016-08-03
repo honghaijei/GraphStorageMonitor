@@ -3,6 +3,7 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
 import java.util.Collection;
@@ -26,7 +27,7 @@ public class SSSP implements AlgorithmTask{
     public void prepare(GraphDataSet dataset) {
         boolean isSource = true;
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -41,7 +42,7 @@ public class SSSP implements AlgorithmTask{
                     while (edgesIterator.hasNext()){
                         //Neighbors
                         GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId());
+                        writer.write(end.getId() + "");
                         if(edgesIterator.hasNext()){
                             writer.write(",");
                         }
@@ -103,8 +104,12 @@ public class SSSP implements AlgorithmTask{
         System.out.println(lsString);
     }
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("sssp", new SSSP());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.setTask("sssp", new SSSP());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        SSSP ssspTask = new SSSP();
+        ssspTask.prepare(d);
+        ssspTask.run();
     }
 }

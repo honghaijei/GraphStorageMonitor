@@ -23,7 +23,7 @@ public class WCC implements AlgorithmTask{
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -31,7 +31,7 @@ public class WCC implements AlgorithmTask{
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
                 GraphNode nextNode = it.next();
-                writer.write(nextNode.getId());//Vertex Id
+                writer.write(nextNode.getId() + "");//Vertex Id
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){

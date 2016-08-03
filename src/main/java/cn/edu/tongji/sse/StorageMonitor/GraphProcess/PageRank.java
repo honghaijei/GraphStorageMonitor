@@ -26,14 +26,14 @@ public class PageRank implements AlgorithmTask {
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write(1);//init pagerank value
+                writer.write(1 + "");//init pagerank value
                 GraphNode nextNode = it.next();
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();

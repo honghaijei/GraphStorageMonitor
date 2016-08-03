@@ -21,7 +21,7 @@ public class DMST implements AlgorithmTask {
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -32,7 +32,7 @@ public class DMST implements AlgorithmTask {
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){
-                    writer.write(1);//edge value
+                    writer.write(1 + "");//edge value
                     //neighbors
                     GraphNode begin = edgesIterator.next().getBegin();
                     GraphNode end = edgesIterator.next().getEnd();

@@ -23,7 +23,7 @@ public class PageRankGiraph implements AlgorithmTask{
     public void prepare(GraphDataSet dataset) {
         boolean isFirstEdge = true;
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {

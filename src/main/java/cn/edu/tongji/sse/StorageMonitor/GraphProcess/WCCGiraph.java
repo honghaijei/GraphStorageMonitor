@@ -24,7 +24,7 @@ public class WCCGiraph implements AlgorithmTask{
     public void prepare(GraphDataSet dataset) {
         boolean isFirstEdge = true;
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -32,7 +32,7 @@ public class WCCGiraph implements AlgorithmTask{
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
                 GraphNode nextNode = it.next();
-                writer.write(nextNode.getId());//vertex id
+                writer.write(nextNode.getId() + "");//vertex id
                 //edges
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
