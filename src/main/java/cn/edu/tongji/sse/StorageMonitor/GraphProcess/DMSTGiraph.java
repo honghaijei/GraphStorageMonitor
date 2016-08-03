@@ -92,7 +92,7 @@ public class DMSTGiraph implements AlgorithmTask{
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("dmst-giraph", new DMSTGiraph());
+        gpts.addTask("dmst-giraph", new DMSTGiraph());
         gpts.run();
     }
 }

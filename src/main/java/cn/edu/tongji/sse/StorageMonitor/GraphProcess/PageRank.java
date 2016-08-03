@@ -75,7 +75,7 @@ public class PageRank implements AlgorithmTask {
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("pagerank", new PageRank());
+        gpts.addTask("pagerank", new PageRank());
         gpts.run();
     }
 }

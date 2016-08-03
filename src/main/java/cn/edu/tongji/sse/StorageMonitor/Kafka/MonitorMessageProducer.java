@@ -22,7 +22,7 @@ public class MonitorMessageProducer {
         // MonitorMessageProducer producer = new MonitorMessageProducer();
 
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaAddr);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaInternalAddr);
 
         props.put("acks", "all");
         props.put("retries", 0);
@@ -34,25 +34,31 @@ public class MonitorMessageProducer {
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         Producer<String, byte[]> producer = new KafkaProducer<String, byte[]>(props);
 
+        while (true) {
+            try {
+                double cpu = MonitorUtils.getCPUUsage();
+                long memory = MonitorUtils.getMemoryUsage();
+                MonitorUtils.NetworkIO networkSend = MonitorUtils.getNetWorkUsage();
+                long in = networkSend.getReceive();
+                long out = networkSend.getSend();
+                System.out.printf("cpu: %f, memory: %dM, network receive: %d, network send: %d\n", cpu, memory, in, out);
+                MonitorMessage msg = new MonitorMessage();
+                msg.setCPUUsage(cpu);
+                msg.setMemoryUsage(memory);
+                msg.setNetworkSend(out);
+                msg.setNetworkReceive(in);
+                msg.setCreateTime(System.currentTimeMillis());
+                msg.setMachineId(args[0]);
 
-        double cpu = MonitorUtils.getCPUUsage();
-        long memory = MonitorUtils.getMemoryUsage();
-        MonitorUtils.NetworkIO networkSend = MonitorUtils.getNetWorkUsage();
-        long in = networkSend.getReceive();
-        long out = networkSend.getSend();
-        System.out.printf("cpu: %f, memory: %dM, network receive: %d, network send: %d\n", cpu, memory, in, out);
-        MonitorMessage msg = new MonitorMessage();
-        msg.setCPUUsage(cpu);
-        msg.setMemoryUsage(memory);
-        msg.setNetworkSend(out);
-        msg.setNetworkReceive(in);
-        msg.setCreateTime(System.currentTimeMillis());
-        msg.setMachineId(args[0]);
+                byte[] bytes = Utils.writeKryoObject(msg);
+                producer.send(new ProducerRecord<String, byte[]>(Config.KafkaMonitorMessageTopic, "", bytes));
+                System.out.println(msg);
 
-        byte[] bytes = Utils.writeKryoObject(msg);
-        producer.send(new ProducerRecord<String, byte[]>(Config.KafkaMonitorMessageTopic, "", bytes));
-        System.out.println(msg);
-        producer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Thread.sleep(3000);
+        }
 
 
     }

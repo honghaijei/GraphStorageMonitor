@@ -80,7 +80,7 @@ public class WCCGiraph implements AlgorithmTask{
     }
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.setTask("wcc-giraph", new WCCGiraph());
+        gpts.addTask("wcc-giraph", new WCCGiraph());
         gpts.run();
     }
 }

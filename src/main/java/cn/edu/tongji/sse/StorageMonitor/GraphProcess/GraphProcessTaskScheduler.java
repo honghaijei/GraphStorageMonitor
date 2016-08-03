@@ -30,7 +30,7 @@ public class GraphProcessTaskScheduler {
     static KafkaConsumer<String, byte[]> taskConsumer;
     static void init() {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaAddr);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaInternalAddr);
 
         props.put("acks", "all");
         props.put("retries", 0);
@@ -55,7 +55,7 @@ public class GraphProcessTaskScheduler {
     public GraphProcessTaskScheduler() {
         init();
     }
-    public void setTask(String s, AlgorithmTask task) {
+    public void addTask(String s, AlgorithmTask task) {
         taskConsumer.subscribe(Arrays.asList(s));
         algorithmTaskMap.put(s, task);
     }
