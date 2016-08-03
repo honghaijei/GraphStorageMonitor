@@ -47,7 +47,10 @@ public class SSSP implements AlgorithmTask{
                         }
                     }
                     writer.write("|0|GRAY|");
-                    writer.newLine();//换行
+                    if(it.hasNext()){
+                        writer.newLine();//换行
+                    }
+                    isSource = false;
                 }
                 else{
                     GraphNode nextNode = it.next();
@@ -63,7 +66,9 @@ public class SSSP implements AlgorithmTask{
                         }
                     }
                     writer.write("|Integer.MAX_VALUE|WHITE|");
-                    writer.newLine();//换行
+                    if(it.hasNext()){
+                        writer.newLine();//换行
+                    }
                 }
             }
             writer.flush();

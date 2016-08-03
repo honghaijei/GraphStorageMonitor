@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.Iterator;
 /**
- * Created by Administrator on 2016/8/2 0002.
+ * Created by chenran on 2016/8/2 0002.
  */
 public class DMST implements AlgorithmTask {
     /**input file name*/
@@ -39,7 +39,9 @@ public class DMST implements AlgorithmTask {
                     writer.write("\t" + begin.getId());
                     writer.write("\t" + end.getId());
                 }
-                writer.newLine();//换行
+                if(it.hasNext()){
+                    writer.newLine();//换行
+                }
             }
             writer.flush();
         } catch (FileNotFoundException e) {

@@ -41,7 +41,9 @@ public class PageRank implements AlgorithmTask {
                     GraphNode end = edgesIterator.next().getEnd();
                     writer.write(" " + end.getId());
                 }
-                writer.newLine();//换行
+                if(it.hasNext()){
+                    writer.newLine();//换行
+                }
             }
             writer.flush();
         } catch (FileNotFoundException e) {

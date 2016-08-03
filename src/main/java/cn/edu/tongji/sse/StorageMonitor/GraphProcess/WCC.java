@@ -19,7 +19,7 @@ public class WCC implements AlgorithmTask{
     @Override
     /*
     data format:
-    SourceId<Tab>neighbor<Tab>neighbor....
+    VertexId<Tab>neighbor<Tab>neighbor....
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
@@ -39,7 +39,9 @@ public class WCC implements AlgorithmTask{
                     GraphNode end = edgesIterator.next().getEnd();
                     writer.write("\t" + end.getId());
                 }
-                writer.newLine();//换行
+                if(it.hasNext()){
+                    writer.newLine();//换行
+                }
             }
             writer.flush();
         } catch (FileNotFoundException e) {
