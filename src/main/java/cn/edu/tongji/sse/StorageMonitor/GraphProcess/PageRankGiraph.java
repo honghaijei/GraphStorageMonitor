@@ -34,7 +34,7 @@ public class PageRankGiraph implements AlgorithmTask{
                 GraphNode nextNode = it.next();
                 writer.write(nextNode.getId() + ",0,");//vertex id and value
                 //edges
-                writer.write(nextNode.getId() + "[");
+                writer.write("[");
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){

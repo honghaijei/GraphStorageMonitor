@@ -11,14 +11,14 @@ import java.util.Iterator;
 /**
  * Created by chenran on 2016/8/3 0003.
  */
-public class SSSPGiraph implements AlgorithmTask{
+public class WCCGiraph implements AlgorithmTask{
     /**input file name*/
-    public static final String INPUT_NAME = "SSSPInput";
+    public static final String INPUT_NAME = "WCCInput";
     /**input data path*/
-    public static final String INPUT_PATH = "/tmp/SSSPInput";
+    public static final String INPUT_PATH = "/tmp/WCCInput";
     /*
     data format
-    [VertexId,VertexValue,[[TargetId,edgeValue],[TargetId,edgeValue].....]]
+    [VertexId<Tab>neighbor<Tab>neighbor.....
      */
     @Override
     public void prepare(GraphDataSet dataset) {
@@ -31,26 +31,15 @@ public class SSSPGiraph implements AlgorithmTask{
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write("[");
                 GraphNode nextNode = it.next();
-                writer.write(nextNode.getId() + ",0,");//vertex id and value
+                writer.write(nextNode.getId());//vertex id
                 //edges
-                writer.write("[");
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){
-                    if(isFirstEdge == true){
-                        GraphNode end = edgesIterator.next().getEnd();
-                        writer.write("[" + end.getId() + ",1]");
-                        isFirstEdge = false;
-                    }
-                    else{
-                        writer.write(",");
-                        GraphNode end = edgesIterator.next().getEnd();
-                        writer.write("[" + end.getId() + ",1]");
-                    }
+                    GraphNode end = edgesIterator.next().getEnd();
+                    writer.write("\t" + end.getId());
                 }
-                writer.write("]]");
                 if(it.hasNext()){
                     writer.newLine();//换行
                 }
@@ -75,13 +64,13 @@ public class SSSPGiraph implements AlgorithmTask{
         String pwdString = Execute.exec("pwd").toString();
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/INPUT_NAME");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/SSSPOutput");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/WCCOutput");
         Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
                 "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
-                "org.apache.giraph.GiraphRunner org.apache.giraph.examples.SimpleShortestPathsComputation " +
-                "-vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat " +
-                "-vip /input/SSSPInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
-                "-op /output/SSSPOutput " +
+                "org.apache.giraph.GiraphRunner org.apache.giraph.examples.ConnectedComponentsComputation " +
+                "-vif org.apache.giraph.io.formats.IntIntNullTextInputFormat " +
+                "-vip /input/WCCInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
+                "-op /output/WCCOutput " +
                 "-w 1 ");
         String lsString = Execute.exec("ls -l").toString();
 
