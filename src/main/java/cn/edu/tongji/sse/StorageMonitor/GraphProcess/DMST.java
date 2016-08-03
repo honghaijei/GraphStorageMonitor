@@ -21,7 +21,7 @@ public class DMST implements AlgorithmTask {
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -32,7 +32,7 @@ public class DMST implements AlgorithmTask {
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){
-                    writer.write(1);//edge value
+                    writer.write(1 + "");//edge value
                     //neighbors
                     GraphNode begin = edgesIterator.next().getBegin();
                     GraphNode end = edgesIterator.next().getEnd();
@@ -61,10 +61,10 @@ public class DMST implements AlgorithmTask {
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.DMST.DMST");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.DMST.DMST");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");

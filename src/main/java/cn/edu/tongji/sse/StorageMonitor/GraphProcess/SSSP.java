@@ -3,6 +3,7 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
 import java.util.Collection;
@@ -26,7 +27,7 @@ public class SSSP implements AlgorithmTask{
     public void prepare(GraphDataSet dataset) {
         boolean isSource = true;
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -41,7 +42,7 @@ public class SSSP implements AlgorithmTask{
                     while (edgesIterator.hasNext()){
                         //Neighbors
                         GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId());
+                        writer.write(end.getId() + "");
                         if(edgesIterator.hasNext()){
                             writer.write(",");
                         }
@@ -60,7 +61,7 @@ public class SSSP implements AlgorithmTask{
                     while (edgesIterator.hasNext()){
                         //Neighbors
                         GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId());
+                        writer.write(end.getId() + "");
                         if(edgesIterator.hasNext()){
                             writer.write(",");
                         }
@@ -89,13 +90,13 @@ public class SSSP implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_1");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/output_graph_4");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.SSSP.GraphSearch");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_1");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_4");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.SSSP.GraphSearch");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
@@ -109,8 +110,12 @@ public class SSSP implements AlgorithmTask{
     }
 
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.addTask("sssp", new SSSP());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.setTask("sssp", new SSSP());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        SSSP ssspTask = new SSSP();
+        ssspTask.prepare(d);
+        ssspTask.run();
     }
 }

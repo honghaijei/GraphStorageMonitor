@@ -26,14 +26,14 @@ public class PageRank implements AlgorithmTask {
      */
     public void prepare(GraphDataSet dataset) {
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write(1);//init pagerank value
+                writer.write(1 + "");//init pagerank value
                 GraphNode nextNode = it.next();
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
@@ -63,10 +63,10 @@ public class PageRank implements AlgorithmTask {
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rm -r /output/PageRankOutput");
-        Execute.exec("/usr/local/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + "INPUT_NAME");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH + " /input");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/PageRankOutput");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");

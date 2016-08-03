@@ -23,7 +23,7 @@ public class PageRankGiraph implements AlgorithmTask{
     public void prepare(GraphDataSet dataset) {
         boolean isFirstEdge = true;
         Iterator<GraphNode> it = dataset.iterator();
-        File file = new File("INPUT_PATH");
+        File file = new File(INPUT_PATH);
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
@@ -72,8 +72,8 @@ public class PageRankGiraph implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/INPUT_NAME");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put INPUT_PATH /input");
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/" + INPUT_NAME);
+        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
         Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/PageRankOutput");
         Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
                 "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
