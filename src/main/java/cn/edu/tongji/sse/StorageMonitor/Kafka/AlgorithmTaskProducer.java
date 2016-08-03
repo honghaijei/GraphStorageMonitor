@@ -16,7 +16,7 @@ public class AlgorithmTaskProducer {
 
     public static void main(String[] args) {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaAddr);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.KafkaInternalAddr);
 
         props.put("acks", "all");
         props.put("retries", 0);
@@ -36,7 +36,7 @@ public class AlgorithmTaskProducer {
             msg.setParameters(null);
             msg.setStorageEndpoint("");
             byte[] bytes = Utils.writeKryoObject(msg);
-            producer.send(new ProducerRecord<String, byte[]>("testtask", "", bytes));
+            producer.send(new ProducerRecord<String, byte[]>(args[0], "", bytes));
             System.out.println(msg);
         }
 

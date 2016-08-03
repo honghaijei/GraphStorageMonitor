@@ -43,7 +43,7 @@ public class GraphProcessTaskScheduler {
         resultProducer = new KafkaProducer<String, byte[]>(props);
 
         Properties prop = new Properties();
-        prop.put("bootstrap.servers", Config.KafkaAddr);
+        prop.put("bootstrap.servers", Config.KafkaInternalAddr);
         prop.put("group.id", "test");
         prop.put("enable.auto.commit", "true");
         prop.put("auto.commit.interval.ms", "1000");
@@ -79,6 +79,7 @@ public class GraphProcessTaskScheduler {
                 resultMsg.setEndTime(endTime);
                 resultMsg.setParameters(taskMsg.getParameters());
                 resultMsg.setStorageEndpoint(taskMsg.getStorageEndpoint());
+                resultMsg.setMachines(new ArrayList<String>(task.getMachines()));
                 byte[] bytes = Utils.writeKryoObject(resultMsg);
                 resultProducer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmResultTopic, "", bytes));
             }
