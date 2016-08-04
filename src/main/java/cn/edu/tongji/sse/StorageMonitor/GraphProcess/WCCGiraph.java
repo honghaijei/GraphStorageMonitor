@@ -78,6 +78,12 @@ public class WCCGiraph implements AlgorithmTask{
         System.out.println(pwdString);
         System.out.println(lsString);
     }
+
+    @Override
+    public Collection<String> getMachines() {
+        return null;
+    }
+
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
         gpts.addTask("wcc-giraph", new WCCGiraph());

@@ -3,10 +3,7 @@ package cn.edu.tongji.sse.StorageMonitor.model;
 import org.apache.commons.collections15.map.LinkedMap;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/7/6 0006.
@@ -16,7 +13,25 @@ public class AlgorithmResultMessage implements Serializable {
     private String algorithm;
     private String storageEndpoint;
     private long createTime;
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
     private Map<String, String> parameters;
+    private List<String> machines;
+
+    public List<String> getMachines() {
+        return machines;
+    }
+
+    public void setMachines(List<String> machines) {
+        this.machines = machines;
+    }
 
     private long startTime;
     private long endTime;

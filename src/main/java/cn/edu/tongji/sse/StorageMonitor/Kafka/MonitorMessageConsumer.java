@@ -16,7 +16,7 @@ import java.util.Properties;
 public class MonitorMessageConsumer {
     public static void main(String args[]) {
         Properties result = new Properties();
-        result.put("bootstrap.servers", Config.KafkaAddr);
+        result.put("bootstrap.servers", Config.KafkaInternalAddr);
         result.put("group.id", "test");
         result.put("enable.auto.commit", "true");
         result.put("auto.commit.interval.ms", "1000");
