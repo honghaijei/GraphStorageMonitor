@@ -38,15 +38,17 @@ public class PageRank implements AlgorithmTask {
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
                 GraphNode nextNode = it.next();
-                writer.write(1 + "");//init pagerank value
-                Collection<GraphEdge> outEdges = nextNode.getOutEdges();
-                Iterator<GraphEdge> edgesIterator = outEdges.iterator();
-                while (edgesIterator.hasNext()){
-                    GraphNode end = edgesIterator.next().getEnd();
-                    writer.write(" " + end.getId());
-                }
-                if(it.hasNext()){
-                    writer.newLine();//换行
+                if (nextNode.getOutEdges().size() != 0){
+                    writer.write(1 + "");//init pagerank value
+                    Collection<GraphEdge> outEdges = nextNode.getOutEdges();
+                    Iterator<GraphEdge> edgesIterator = outEdges.iterator();
+                    while (edgesIterator.hasNext()){
+                        GraphNode end = edgesIterator.next().getEnd();
+                        writer.write(" " + end.getId());
+                    }
+                    if(it.hasNext()){
+                        writer.newLine();//换行
+                    }
                 }
             }
             System.out.println("finish page prepare");
