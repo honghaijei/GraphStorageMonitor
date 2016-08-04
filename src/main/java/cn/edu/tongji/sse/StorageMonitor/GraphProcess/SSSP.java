@@ -25,7 +25,7 @@ public class SSSP implements AlgorithmTask{
      */
     @Override
     public void prepare(GraphDataSet dataset) {
-        boolean isSource = true;
+        //boolean isSource = true;
         Iterator<GraphNode> it = dataset.iterator();
         File file = new File(INPUT_PATH);
         FileWriter fw = null;
@@ -33,40 +33,23 @@ public class SSSP implements AlgorithmTask{
         try {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
+            writer.write(27383 + "\t");//SourceNode Id
+            writer.write("27384|0|GRAY|");
             while(it.hasNext()){
-                if(isSource == true){
-                    GraphNode nextNode = it.next();
-                    writer.write(nextNode.getId() + "\t");//SourceNode Id
-                    Collection<GraphEdge> outEdges = nextNode.getOutEdges();
-                    Iterator<GraphEdge> edgesIterator = outEdges.iterator();
-                    while (edgesIterator.hasNext()){
-                        //Neighbors
-                        GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId() + "");
-                        if(edgesIterator.hasNext()){
-                            writer.write(",");
-                        }
+                GraphNode nextNode = it.next();
+                if (nextNode.getId() != 27383){
+                        writer.write(nextNode.getId() + "\t");//Vertex Id
+                        Collection<GraphEdge> outEdges = nextNode.getOutEdges();
+                        Iterator<GraphEdge> edgesIterator = outEdges.iterator();
+                        while (edgesIterator.hasNext()){
+                            //Neighbors
+                            GraphNode end = edgesIterator.next().getEnd();
+                            writer.write(end.getId() + "");
+                            if(edgesIterator.hasNext()){
+                                writer.write(",");
+                            }
+                        writer.write("|Integer.MAX_VALUE|WHITE|");
                     }
-                    writer.write("|0|GRAY|");
-                    if(it.hasNext()){
-                        writer.newLine();//换行
-                    }
-                    isSource = false;
-                }
-                else{
-                    GraphNode nextNode = it.next();
-                    writer.write(nextNode.getId() + "\t");//Vertex Id
-                    Collection<GraphEdge> outEdges = nextNode.getOutEdges();
-                    Iterator<GraphEdge> edgesIterator = outEdges.iterator();
-                    while (edgesIterator.hasNext()){
-                        //Neighbors
-                        GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(end.getId() + "");
-                        if(edgesIterator.hasNext()){
-                            writer.write(",");
-                        }
-                    }
-                    writer.write("|Integer.MAX_VALUE|WHITE|");
                     if(it.hasNext()){
                         writer.newLine();//换行
                     }
@@ -96,7 +79,7 @@ public class SSSP implements AlgorithmTask{
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_4");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.SSSP.GraphSearch");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.SSSP.GraphSearch");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");

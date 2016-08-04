@@ -3,6 +3,8 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,8 +35,8 @@ public class PageRank implements AlgorithmTask {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write(1 + "");//init pagerank value
                 GraphNode nextNode = it.next();
+                writer.write(1 + "");//init pagerank value
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){
@@ -74,8 +76,12 @@ public class PageRank implements AlgorithmTask {
         System.out.println(lsString);
     }
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.addTask("pagerank", new PageRank());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.addTask("pagerank", new PageRank());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        PageRank toyTask = new PageRank();
+        toyTask.prepare(d);
+        toyTask.run();
     }
 }
