@@ -63,25 +63,28 @@ public class GraphProcessTaskScheduler {
         while (true) {
             ConsumerRecords<String, byte[]> records = taskConsumer.poll(2000);
             for (ConsumerRecord<String, byte[]> record : records) {
-
-                AlgorithmTaskMessage taskMsg = Utils.readKryoObject(AlgorithmTaskMessage.class, record.value());
-                GraphDataSet dataset = getGraphDataSource(taskMsg);
-                AlgorithmTask task = algorithmTaskMap.get(record.topic());
-                task.prepare(dataset);
-                long startTime = System.currentTimeMillis();
-                task.run();
-                long endTime = System.currentTimeMillis();
-                AlgorithmResultMessage resultMsg = new AlgorithmResultMessage();
-                resultMsg.setTaskId(taskMsg.getTaskId());
-                resultMsg.setAlgorithm(taskMsg.getAlgorithm());
-                resultMsg.setCreateTime(taskMsg.getCreateTime());
-                resultMsg.setStartTime(startTime);
-                resultMsg.setEndTime(endTime);
-                resultMsg.setParameters(taskMsg.getParameters());
-                resultMsg.setStorageEndpoint(taskMsg.getStorageEndpoint());
-                resultMsg.setMachines(new ArrayList<String>(task.getMachines()));
-                byte[] bytes = Utils.writeKryoObject(resultMsg);
-                resultProducer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmResultTopic, "", bytes));
+                try {
+                    AlgorithmTaskMessage taskMsg = Utils.readKryoObject(AlgorithmTaskMessage.class, record.value());
+                    GraphDataSet dataset = getGraphDataSource(taskMsg);
+                    AlgorithmTask task = algorithmTaskMap.get(record.topic());
+                    task.prepare(dataset);
+                    long startTime = System.currentTimeMillis();
+                    task.run();
+                    long endTime = System.currentTimeMillis();
+                    AlgorithmResultMessage resultMsg = new AlgorithmResultMessage();
+                    resultMsg.setTaskId(taskMsg.getTaskId());
+                    resultMsg.setAlgorithm(taskMsg.getAlgorithm());
+                    resultMsg.setCreateTime(taskMsg.getCreateTime());
+                    resultMsg.setStartTime(startTime);
+                    resultMsg.setEndTime(endTime);
+                    resultMsg.setParameters(taskMsg.getParameters());
+                    resultMsg.setStorageEndpoint(taskMsg.getStorageEndpoint());
+                    resultMsg.setMachines(new ArrayList<String>(task.getMachines()));
+                    byte[] bytes = Utils.writeKryoObject(resultMsg);
+                    resultProducer.send(new ProducerRecord<String, byte[]>(Config.KafkaAlgorithmResultTopic, "", bytes));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
