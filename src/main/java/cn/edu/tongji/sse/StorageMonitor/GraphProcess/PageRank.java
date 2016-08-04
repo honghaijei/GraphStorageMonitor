@@ -3,11 +3,14 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -25,6 +28,7 @@ public class PageRank implements AlgorithmTask {
     format:pagerankValue neighbor neighbor neighbor .....
      */
     public void prepare(GraphDataSet dataset) {
+        System.out.println("start page prepare");
         Iterator<GraphNode> it = dataset.iterator();
         File file = new File(INPUT_PATH);
         FileWriter fw = null;
@@ -33,8 +37,8 @@ public class PageRank implements AlgorithmTask {
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
-                writer.write(1 + "");//init pagerank value
                 GraphNode nextNode = it.next();
+                writer.write(1 + "");//init pagerank value
                 Collection<GraphEdge> outEdges = nextNode.getOutEdges();
                 Iterator<GraphEdge> edgesIterator = outEdges.iterator();
                 while (edgesIterator.hasNext()){
@@ -45,6 +49,7 @@ public class PageRank implements AlgorithmTask {
                     writer.newLine();//换行
                 }
             }
+            System.out.println("finish page prepare");
             writer.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -63,10 +68,15 @@ public class PageRank implements AlgorithmTask {
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
+        System.out.println("finish page pwd");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + "INPUT_NAME");
+        System.out.println("finish page rm input");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH + " /input");
+        System.out.println("finish page put input");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/PageRankOutput");
+        System.out.println("finish page rm output");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
+        System.out.println("finish page jar");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
@@ -76,7 +86,7 @@ public class PageRank implements AlgorithmTask {
 
     @Override
     public Collection<String> getMachines() {
-        return null;
+        return Arrays.asList("192.168.1.71", "192.168.1.72");
     }
 
     public static void main(String[] args) {
