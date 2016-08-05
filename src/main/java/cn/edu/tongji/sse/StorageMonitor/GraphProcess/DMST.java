@@ -32,19 +32,21 @@ public class DMST implements AlgorithmTask {
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
                 GraphNode nextNode = it.next();
-                Collection<GraphEdge> outEdges = nextNode.getOutEdges();
-                Iterator<GraphEdge> edgesIterator = outEdges.iterator();
-                while (edgesIterator.hasNext()){
-                    writer.write(1 + "");//edge value
-                    //neighbors
-                    GraphEdge nextEdge = edgesIterator.next();
-                    GraphNode begin = nextEdge.getBegin();
-                    GraphNode end = nextEdge.getEnd();
-                    writer.write("\t" + begin.getId());
-                    writer.write("\t" + end.getId());
-                }
-                if(it.hasNext()){
-                    writer.newLine();//换行
+                if (nextNode.getOutEdges().size() != 0){
+                    Collection<GraphEdge> outEdges = nextNode.getOutEdges();
+                    Iterator<GraphEdge> edgesIterator = outEdges.iterator();
+                    while (edgesIterator.hasNext()){
+                        writer.write(1 + "");//edge value
+                        //neighbors
+                        GraphEdge nextEdge = edgesIterator.next();
+                        GraphNode begin = nextEdge.getBegin();
+                        GraphNode end = nextEdge.getEnd();
+                        writer.write("\t" + begin.getId());
+                        writer.write("\t" + end.getId());
+                        if(it.hasNext() || edgesIterator.hasNext()){
+                            writer.newLine();//换行
+                        }
+                    }
                 }
             }
             System.out.println("finish page prepare");
