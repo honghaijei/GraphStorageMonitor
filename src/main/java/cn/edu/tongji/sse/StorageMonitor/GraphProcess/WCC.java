@@ -24,6 +24,7 @@ public class WCC implements AlgorithmTask{
     VertexId<Tab>neighbor<Tab>neighbor....
      */
     public void prepare(GraphDataSet dataset) {
+        System.out.println("start wcc prepare");
         Iterator<GraphNode> it = dataset.iterator();
         File file = new File(INPUT_PATH);
         FileWriter fw = null;
@@ -45,6 +46,7 @@ public class WCC implements AlgorithmTask{
                     writer.newLine();//换行
                 }
             }
+            System.out.println("finish wcc prepare");
             writer.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -63,12 +65,17 @@ public class WCC implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
+        System.out.println("finish wcc pwd");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+        System.out.println("finish wcc rm input");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        System.out.println("finish wcc put input");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/hadoop-examples.jar cn.edu.tongji.CCC.MindistSearchJob");
+        System.out.println("finish wcc rm output");
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.CCC.MindistSearchJob");
+        System.out.println("finish wcc jar");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");

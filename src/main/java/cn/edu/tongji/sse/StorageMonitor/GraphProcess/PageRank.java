@@ -25,7 +25,7 @@ public class PageRank implements AlgorithmTask {
     public static final String INPUT_PATH = "/tmp/PageRankInput";
     @Override
     /*
-    format:pagerankValue neighbor neighbor neighbor .....
+    format:VertexId<Tab>pagerankValue|neighbor,neighbor,neighbor .....
      */
     public void prepare(GraphDataSet dataset) {
         System.out.println("start page prepare");
@@ -38,13 +38,17 @@ public class PageRank implements AlgorithmTask {
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
                 GraphNode nextNode = it.next();
-                if (nextNode.getOutEdges().size() != 0){
-                    writer.write(1 + "");//init pagerank value
-                    Collection<GraphEdge> outEdges = nextNode.getOutEdges();
-                    Iterator<GraphEdge> edgesIterator = outEdges.iterator();
-                    while (edgesIterator.hasNext()){
-                        GraphNode end = edgesIterator.next().getEnd();
-                        writer.write(" " + end.getId());
+                writer.write(nextNode.getId() + "\t");
+                writer.write(1 + "|");//init pagerank value
+                Collection<GraphEdge> outEdges = nextNode.getOutEdges();
+                Iterator<GraphEdge> edgesIterator = outEdges.iterator();
+                while (edgesIterator.hasNext()){
+                    GraphNode end = edgesIterator.next().getEnd();
+                    if (edgesIterator.hasNext()){
+                        writer.write(end.getId() + ",");
+                    }
+                    else {
+                        writer.write(end.getId() + "");
                     }
                     if(it.hasNext()){
                         writer.newLine();//换行
@@ -77,7 +81,7 @@ public class PageRank implements AlgorithmTask {
         System.out.println("finish page put input");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/PageRankOutput");
         System.out.println("finish page rm output");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar examples/PageRank.jar cn.edu.tongji.PageRank.PageRank").toString();
+        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.PageRank.PageRank").toString();
         System.out.println("finish page jar");
         String lsString = Execute.exec("ls -l").toString();
 
@@ -92,8 +96,12 @@ public class PageRank implements AlgorithmTask {
     }
 
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.addTask("pagerank", new PageRank());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.addTask("pagerank", new PageRank());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        PageRank toyTask = new PageRank();
+        toyTask.prepare(d);
+        toyTask.run();
     }
 }

@@ -3,6 +3,7 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class WCCGiraph implements AlgorithmTask{
      */
     @Override
     public void prepare(GraphDataSet dataset) {
+        System.out.println("start wcc giraph prepare");
         boolean isFirstEdge = true;
         Iterator<GraphNode> it = dataset.iterator();
         File file = new File(INPUT_PATH);
@@ -44,6 +46,7 @@ public class WCCGiraph implements AlgorithmTask{
                     writer.newLine();//换行
                 }
             }
+            System.out.println("finish wcc giraph prepare");
             writer.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -62,16 +65,21 @@ public class WCCGiraph implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/" + INPUT_NAME);
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put "+ INPUT_PATH  + " /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/WCCOutput");
-        Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
-                "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
+        System.out.println("finish wcc giraph pwd");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /input/" + INPUT_NAME);
+        System.out.println("finish wcc giraph rmr input");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -put "+ INPUT_PATH  + " /input");
+        System.out.println("finish wcc giraph put");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /output/WCCOutput");
+        System.out.println("finish wcc giraph rmr output");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop jar " +
+                "~/giraph/giraph/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
                 "org.apache.giraph.GiraphRunner org.apache.giraph.examples.ConnectedComponentsComputation " +
                 "-vif org.apache.giraph.io.formats.IntIntNullTextInputFormat " +
                 "-vip /input/WCCInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
                 "-op /output/WCCOutput " +
                 "-w 1 ");
+        System.out.println("finish wcc giraph jar");
         String lsString = Execute.exec("ls -l").toString();
 
         System.out.println("==========INFO=============");
@@ -85,8 +93,12 @@ public class WCCGiraph implements AlgorithmTask{
     }
 
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.addTask("wcc-giraph", new WCCGiraph());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.addTask("wcc-giraph", new WCCGiraph());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        WCCGiraph toyTask = new WCCGiraph();
+        toyTask.prepare(d);
+        toyTask.run();
     }
 }

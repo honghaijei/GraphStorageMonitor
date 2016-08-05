@@ -3,6 +3,7 @@ package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphDataSet;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphEdge;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
+import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class DMSTGiraph implements AlgorithmTask{
      */
     @Override
     public void prepare(GraphDataSet dataset) {
+        System.out.println("start dmst giraph prepare");
         boolean isFirstEdge = true;
         Iterator<GraphNode> it = dataset.iterator();
         File file = new File(INPUT_PATH);
@@ -55,6 +57,7 @@ public class DMSTGiraph implements AlgorithmTask{
                     writer.newLine();//换行
                 }
             }
+            System.out.println("finish dmst giraph prepare");
             writer.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -73,11 +76,14 @@ public class DMSTGiraph implements AlgorithmTask{
     @Override
     public void run() {
         String pwdString = Execute.exec("pwd").toString();
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /input/" + INPUT_NAME);
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        Execute.exec("/usr/local/hadoop/bin/hadoop fs -rmr /output/DMSTOutput");
-        Execute.exec("/usr/local/hadoop/./bin/hadoop jar " +
-                "$GIRAPH_HOME/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
+        System.out.println("finish dmst giraph pwd");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /input/" + INPUT_NAME);
+        System.out.println("finish dmst giraph rmr input");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+        System.out.println("finish dmst giraph put");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /output/DMSTOutput");
+        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop jar " +
+                "~/giraph/giraph/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
                 "org.apache.giraph.GiraphRunner org.apache.giraph.examples.MinSpanningTree " +
                 "-vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat " +
                 "-vip /input/DMSTInput -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat " +
@@ -97,8 +103,12 @@ public class DMSTGiraph implements AlgorithmTask{
     }
 
     public static void main(String[] args) {
-        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        gpts.addTask("dmst-giraph", new DMSTGiraph());
-        gpts.run();
+        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        //gpts.addTask("dmst-giraph", new DMSTGiraph());
+        //gpts.run();
+        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        DMSTGiraph toyTask = new DMSTGiraph();
+        toyTask.prepare(d);
+        toyTask.run();
     }
 }
