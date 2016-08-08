@@ -59,6 +59,15 @@ public class SSSP implements AlgorithmTask{
             }
             System.out.println("finish SSSP prepare");
             writer.flush();
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+            System.out.println("finish SSSP rm input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+            System.out.println("finish SSSP put input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_1");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_4");
+            System.out.println("finish SSSP rm output");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }catch (IOException e) {
@@ -75,24 +84,8 @@ public class SSSP implements AlgorithmTask{
 
     @Override
     public void run() {
-        String pwdString = Execute.exec("pwd").toString();
-        System.out.println("finish SSSP pwd");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
-        System.out.println("finish SSSP rm input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        System.out.println("finish SSSP put input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_1");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_2");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_3");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/output_graph_4");
-        System.out.println("finish SSSP rm output");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.SSSP.GraphSearch");
         System.out.println("finish SSSP jar");
-        String lsString = Execute.exec("ls -l").toString();
-
-        System.out.println("==========INFO=============");
-        System.out.println(pwdString);
-        System.out.println(lsString);
     }
 
     @Override
@@ -100,9 +93,11 @@ public class SSSP implements AlgorithmTask{
         return Arrays.asList("192.168.1.71", "192.168.1.72");
     }
 
+    /*
     public static void main(String[] args) {
         GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
         gpts.addTask("sssp", new SSSP());
         gpts.run();
     }
+    */
 }

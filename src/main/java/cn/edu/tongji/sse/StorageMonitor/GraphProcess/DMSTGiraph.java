@@ -6,6 +6,7 @@ import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -59,6 +60,12 @@ public class DMSTGiraph implements AlgorithmTask{
             }
             System.out.println("finish dmst giraph prepare");
             writer.flush();
+            Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /input/" + INPUT_NAME);
+            System.out.println("finish dmst giraph rmr input");
+            Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+            System.out.println("finish dmst giraph put");
+            Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /output/DMSTOutput");
+            System.out.println("finish dmst giraph rmr out");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }catch (IOException e) {
@@ -75,13 +82,7 @@ public class DMSTGiraph implements AlgorithmTask{
 
     @Override
     public void run() {
-        String pwdString = Execute.exec("pwd").toString();
-        System.out.println("finish dmst giraph pwd");
-        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /input/" + INPUT_NAME);
-        System.out.println("finish dmst giraph rmr input");
-        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        System.out.println("finish dmst giraph put");
-        Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop fs -rmr /output/DMSTOutput");
+
         Execute.exec("~/hadoop/hadoop-0.20.203.0/bin/hadoop jar " +
                 "~/giraph/giraph/giraph-examples/target/giraph-examples-1.2.0-SNAPSHOT-for-hadoop-1.2.1-jar-with-dependencies.jar " +
                 "org.apache.giraph.GiraphRunner org.apache.giraph.examples.MinSpanningTree " +
@@ -90,25 +91,23 @@ public class DMSTGiraph implements AlgorithmTask{
                 "-op /output/DMSTOutput " +
                 "-w 1 " +
                 "-mc org.apache.giraph.examples.MinSpanningTree\\MinSpanningTreeMasterCompute");
-        String lsString = Execute.exec("ls -l").toString();
-
-        System.out.println("==========INFO=============");
-        System.out.println(pwdString);
-        System.out.println(lsString);
+        System.out.println("finish DMST giraph jar");
     }
 
     @Override
     public Collection<String> getMachines() {
-        return null;
+        return Arrays.asList("192.168.1.71", "192.168.1.72");
     }
 
+    /*
     public static void main(String[] args) {
-        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        //gpts.addTask("dmst-giraph", new DMSTGiraph());
-        //gpts.run();
-        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
-        DMSTGiraph toyTask = new DMSTGiraph();
-        toyTask.prepare(d);
-        toyTask.run();
+        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        gpts.addTask("dmst-giraph", new DMSTGiraph());
+        gpts.run();
+        //GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        //DMSTGiraph toyTask = new DMSTGiraph();
+        //toyTask.prepare(d);
+        //toyTask.run();
     }
+    */
 }

@@ -6,6 +6,7 @@ import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -48,6 +49,14 @@ public class WCC implements AlgorithmTask{
             }
             System.out.println("finish wcc prepare");
             writer.flush();
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+            System.out.println("finish wcc rm input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+            System.out.println("finish wcc put input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");
+            System.out.println("finish wcc rm output");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }catch (IOException e) {
@@ -64,37 +73,25 @@ public class WCC implements AlgorithmTask{
 
     @Override
     public void run() {
-        String pwdString = Execute.exec("pwd").toString();
-        System.out.println("finish wcc pwd");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
-        System.out.println("finish wcc rm input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        System.out.println("finish wcc put input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput1");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput2");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutputfinal");
-        System.out.println("finish wcc rm output");
+
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.CCC.MindistSearchJob");
         System.out.println("finish wcc jar");
-        String lsString = Execute.exec("ls -l").toString();
-
-        System.out.println("==========INFO=============");
-        System.out.println(pwdString);
-        System.out.println(lsString);
     }
 
     @Override
     public Collection<String> getMachines() {
-        return null;
+        return Arrays.asList("192.168.1.71", "192.168.1.72");
     }
 
+    /*
     public static void main(String[] args) {
-        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        //gpts.addTask("wcc", new WCC());
-        //gpts.run();
-        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
-        WCC toyTask = new WCC();
-        toyTask.prepare(d);
-        toyTask.run();
+        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        gpts.addTask("wcc", new WCC());
+        gpts.run();
+        //GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        //WCC toyTask = new WCC();
+        //toyTask.prepare(d);
+        //toyTask.run();
     }
+    */
 }

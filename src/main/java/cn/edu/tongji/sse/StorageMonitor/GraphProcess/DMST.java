@@ -6,6 +6,7 @@ import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.GraphNode;
 import cn.edu.tongji.sse.StorageMonitor.GraphDataSource.Neo4j.Neo4jGraphDataSet;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 /**
@@ -27,7 +28,7 @@ public class DMST implements AlgorithmTask {
         FileWriter fw = null;
         BufferedWriter writer = null;
         try {
-            System.out.println("start page prepare");
+            System.out.println("start DMST prepare");
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
             while(it.hasNext()){
@@ -49,8 +50,14 @@ public class DMST implements AlgorithmTask {
                     }
                 }
             }
-            System.out.println("finish page prepare");
+            System.out.println("finish DMST prepare");
             writer.flush();
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
+            System.out.println("finish DMST rm input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
+            System.out.println("finish DMST put input");
+            Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
+            System.out.println("finish dmst rm output");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }catch (IOException e) {
@@ -67,35 +74,24 @@ public class DMST implements AlgorithmTask {
 
     @Override
     public void run() {
-        String pwdString = Execute.exec("pwd").toString();
-        System.out.println("finish page pwd");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /input/" + INPUT_NAME);
-        System.out.println("finish page rm input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -put " + INPUT_PATH  + " /input");
-        System.out.println("finish page put input");
-        Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop fs -rm -r /output/DMSTOutput");
-        System.out.println("finish dmst rm output");
         Execute.exec("/usr/hdp/2.4.2.0-258/hadoop/bin/hadoop jar /usr/hdp/2.4.2.0-258/hadoop/hadoop-examples/hadoop-examples.jar cn.edu.tongji.DMST.DMST");
         System.out.println("finish dmst jar");
-        String lsString = Execute.exec("ls -l").toString();
-
-        System.out.println("==========INFO=============");
-        System.out.println(pwdString);
-        System.out.println(lsString);
     }
 
     @Override
     public Collection<String> getMachines() {
-        return null;
+        return Arrays.asList("192.168.1.71", "192.168.1.72");
     }
 
+    /*
     public static void main(String[] args) {
-        //GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
-        //gpts.addTask("dmst", new DMST());
-        //gpts.run();
-        GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
-        DMST toyTask = new DMST();
-        toyTask.prepare(d);
-        toyTask.run();
+        GraphProcessTaskScheduler gpts = new GraphProcessTaskScheduler();
+        gpts.addTask("dmst", new DMST());
+        gpts.run();
+       //GraphDataSet d = new Neo4jGraphDataSet("http://10.60.45.79:7474", "Basic bmVvNGo6MTIzNDU2");
+        //DMST toyTask = new DMST();
+        //toyTask.prepare(d);
+        //toyTask.run();
     }
+    */
 }
