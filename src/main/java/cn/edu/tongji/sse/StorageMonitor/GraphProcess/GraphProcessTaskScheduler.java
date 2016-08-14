@@ -56,10 +56,10 @@ public class GraphProcessTaskScheduler {
         init();
     }
     public void addTask(String s, AlgorithmTask task) {
-        taskConsumer.subscribe(Arrays.asList(s));
         algorithmTaskMap.put(s, task);
     }
     public void run() {
+        taskConsumer.subscribe(algorithmTaskMap.keySet());
         while (true) {
             ConsumerRecords<String, byte[]> records = taskConsumer.poll(2000);
             for (ConsumerRecord<String, byte[]> record : records) {
