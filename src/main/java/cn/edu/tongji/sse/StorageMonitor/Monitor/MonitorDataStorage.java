@@ -98,6 +98,7 @@ public class MonitorDataStorage {
                                         t.put("memory", e.getValue().getMemoryUsage() + "");
                                         t.put("networkReceive", e.getValue().getNetworkReceive() + "");
                                         t.put("networkSend", e.getValue().getNetworkSend() + "");
+                                        t.put("createTime", e.getValue().getCreateTime() + "");
                                         jsonLogs.put(t);
                                     }
                                 }
