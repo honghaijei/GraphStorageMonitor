@@ -97,7 +97,7 @@ public class PageRankGiraph implements AlgorithmTask{
 
     @Override
     public Collection<String> getMachines() {
-        return Arrays.asList("192.168.1.61", "192.168.1.62");
+        return Arrays.asList("192.168.1.90", "192.168.1.91", "192.168.1.92");
     }
 
     /*

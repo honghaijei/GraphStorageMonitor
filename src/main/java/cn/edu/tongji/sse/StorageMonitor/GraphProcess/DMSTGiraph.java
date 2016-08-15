@@ -101,7 +101,7 @@ public class DMSTGiraph implements AlgorithmTask{
 
     @Override
     public Collection<String> getMachines() {
-        return Arrays.asList("192.168.1.71", "192.168.1.72");
+        return Arrays.asList("192.168.1.90", "192.168.1.91", "192.168.1.92");
     }
 
     /*
