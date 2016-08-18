@@ -1,7 +1,7 @@
 package cn.edu.tongji.sse.StorageMonitor.GraphProcess;
 
 /**
- * Created by Administrator on 2016/8/8 0008.
+ * Created by chenran on 2016/8/8 0008.
  */
 public class GiraphRunner {
     public static void main(String[] args) {

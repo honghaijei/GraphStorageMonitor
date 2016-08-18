@@ -80,7 +80,7 @@ public class DMST implements AlgorithmTask {
 
     @Override
     public Collection<String> getMachines() {
-        return Arrays.asList("192.168.1.71", "192.168.1.72");
+        return Arrays.asList("192.168.1.61", "192.168.1.62");
     }
 
     /*
