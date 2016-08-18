@@ -1,10 +1,16 @@
 package cn.edu.tongji.sse.StorageMonitor.Kafka;
 
 import cn.edu.tongji.sse.StorageMonitor.Config;
+import cn.edu.tongji.sse.StorageMonitor.Helper.AlgorithmTaskDatabaseConnector;
+import cn.edu.tongji.sse.StorageMonitor.Helper.MonitorLogDatabaseConnector;
 import cn.edu.tongji.sse.StorageMonitor.Utils;
 import cn.edu.tongji.sse.StorageMonitor.model.AlgorithmTaskMessage;
+import cn.edu.tongji.sse.StorageMonitor.model.MySqlAllDataEntry;
+import cn.edu.tongji.sse.StorageMonitor.model.MySqlTaskEntry;
 import org.apache.kafka.clients.producer.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -36,6 +42,16 @@ public class AlgorithmTaskProducer {
             msg.setParameters(null);
             msg.setStorageEndpoint("");
             byte[] bytes = Utils.writeKryoObject(msg);
+
+            AlgorithmTaskDatabaseConnector connector = new AlgorithmTaskDatabaseConnector();
+            Connection c = connector.ConnectMysql();
+            connector.InsertSql(new MySqlTaskEntry(msg.getTaskId(), msg.getAlgorithm(), args[0], msg.getCreateTime(), "waiting"));
+            try {
+                connector.CutConnection(c);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
             producer.send(new ProducerRecord<String, byte[]>(args[0], "", bytes));
             System.out.println(msg);
         }
