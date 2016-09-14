@@ -49,6 +49,11 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>0.10.0.0</version>
@@ -77,11 +82,6 @@
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-api</artifactId>
             <version>2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>

@@ -37,7 +37,7 @@ public class AlgorithmTaskProducer {
         for (int i = 0; i < count; ++i) {
             AlgorithmTaskMessage msg = new AlgorithmTaskMessage();
             msg.setTaskId(java.util.UUID.randomUUID().toString());
-            msg.setAlgorithm(choices[rand.nextInt(choices.length)]);
+            msg.setAlgorithm("test");
             msg.setCreateTime(System.currentTimeMillis());
             msg.setParameters(null);
             msg.setStorageEndpoint("");
